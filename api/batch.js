@@ -3,8 +3,6 @@
 // Endpoint: POST /api/batch
 // Body    : { ids: string[], apiKey: string, userId: string, assetType: string, concurrency: number, mode: string }
 
-import FormData from "form-data";
-
 const OPEN_CLOUD_BASE  = "https://apis.roblox.com/assets/v1/assets";
 const POLL_INTERVAL_MS = 1500;
 const POLL_MAX         = 40;
@@ -126,7 +124,6 @@ function patchCreator(buffer, userId) {
 
 function patchXml(buffer, userId) {
   let xml = buffer.toString("utf8");
-  // Ganti semua value CreatorId / UserId / RobloxId
   xml = xml.replace(/(<(?:CreatorId|UserId|RobloxId)>)\d+(<\/)/g, `$1${userId}$2`);
   xml = xml.replace(/(<CreatorType>)\d+(<\/)/g, "${1}1$2");
   return Buffer.from(xml, "utf8");
@@ -168,18 +165,20 @@ async function uploadAsset(buffer, apiKey, userId, assetType) {
     },
   });
 
+  // Native FormData — no import needed, built-in Node 18+
   const form = new FormData();
-  form.append("request", metadata, { contentType: "application/json" });
-  form.append("fileContent", buffer, {
-    filename:    "asset.bin",
-    contentType: "application/octet-stream",
-    knownLength: buffer.byteLength,
-  });
+  form.append("request", new Blob([metadata], { type: "application/json" }));
+  form.append(
+    "fileContent",
+    new Blob([buffer], { type: "application/octet-stream" }),
+    "asset.bin"
+  );
 
   const res = await fetchWithRetry(OPEN_CLOUD_BASE, {
     method:  "POST",
-    headers: { "x-api-key": apiKey, ...form.getHeaders() },
-    body:    form.getBuffer(),
+    headers: { "x-api-key": apiKey },
+    // jangan set Content-Type manual — biar fetch isi boundary sendiri
+    body: form,
   });
 
   if (!res.ok) {
@@ -187,4 +186,74 @@ async function uploadAsset(buffer, apiKey, userId, assetType) {
     throw new Error(`Upload HTTP ${res.status}: ${txt.slice(0, 300)}`);
   }
 
-  cons
+  const data = await res.json();
+  const operationId = data.path?.split("/").pop();
+  if (!operationId) throw new Error(`No operation path: ${JSON.stringify(data)}`);
+  return operationId;
+}
+
+// ── Step 4: Poll operation ────────────────────────────────────────────────────
+
+async function pollOperation(operationId, apiKey) {
+  const url = `https://apis.roblox.com/assets/v1/operations/${operationId}`;
+
+  for (let i = 0; i < POLL_MAX; i++) {
+    await sleep(POLL_INTERVAL_MS);
+
+    const res = await fetchWithRetry(url, {
+      headers: { "x-api-key": apiKey },
+    });
+
+    if (!res.ok) {
+      const txt = await res.text().catch(() => "");
+      throw new Error(`Poll HTTP ${res.status}: ${txt.slice(0, 200)}`);
+    }
+
+    const data = await res.json();
+
+    if (data.done) {
+      if (data.error) throw new Error(`Operation failed: ${JSON.stringify(data.error)}`);
+      const assetId = data.response?.assetId ?? data.response?.asset?.assetId;
+      if (!assetId) throw new Error(`No assetId in response: ${JSON.stringify(data)}`);
+      return String(assetId);
+    }
+  }
+
+  throw new Error(`Operation ${operationId} timed out after ${POLL_MAX} polls`);
+}
+
+// ── Concurrency helper ────────────────────────────────────────────────────────
+
+async function processWithConcurrency(items, limit, fn) {
+  const results = new Array(items.length);
+  let idx = 0;
+
+  async function worker() {
+    while (idx < items.length) {
+      const i = idx++;
+      results[i] = await fn(items[i]);
+    }
+  }
+
+  await Promise.all(Array.from({ length: limit }, worker));
+  return results;
+}
+
+// ── Fetch with retry ──────────────────────────────────────────────────────────
+
+async function fetchWithRetry(url, options = {}, retries = RETRY_MAX) {
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    try {
+      return await fetch(url, options);
+    } catch (err) {
+      if (attempt === retries) throw err;
+      await sleep(RETRY_DELAY_MS * (attempt + 1));
+    }
+  }
+}
+
+// ── Util ──────────────────────────────────────────────────────────────────────
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}

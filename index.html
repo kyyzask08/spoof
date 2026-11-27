@@ -31,15 +31,13 @@
     padding: 40px 16px 80px;
   }
 
-  /* ── Header ── */
   header { width: 100%; max-width: 760px; margin-bottom: 40px; }
   .logo { font-size: 11px; letter-spacing: .18em; color: var(--accent); text-transform: uppercase; font-weight: 600; margin-bottom: 8px; }
   h1 { font-size: clamp(1.6rem,4vw,2.4rem); font-weight: 700; line-height: 1.1; color: #fff; }
   h1 span { color: var(--accent2); }
   .subtitle { margin-top: 8px; color: var(--muted); font-size: 14px; max-width: 500px; line-height: 1.6; }
 
-  /* ── Proxy status pill ── */
-  .proxy-status {
+  .api-status {
     display: inline-flex; align-items: center; gap: 7px;
     margin-top: 14px; padding: 5px 12px;
     border-radius: 999px; border: 1px solid var(--border);
@@ -47,20 +45,18 @@
     cursor: pointer; transition: border-color .2s;
     user-select: none;
   }
-  .proxy-status:hover { border-color: var(--accent); }
-  .proxy-dot {
+  .api-status:hover { border-color: var(--accent); }
+  .api-dot {
     width: 7px; height: 7px; border-radius: 50%;
     background: var(--muted); flex-shrink: 0;
     transition: background .3s;
   }
-  .proxy-dot.ok   { background: var(--ok);  box-shadow: 0 0 6px var(--ok); }
-  .proxy-dot.fail { background: var(--err); }
+  .api-dot.ok   { background: var(--ok);  box-shadow: 0 0 6px var(--ok); }
+  .api-dot.fail { background: var(--err); }
 
-  /* ── Card ── */
   .card { width: 100%; max-width: 760px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 28px; margin-bottom: 20px; }
   .card-title { font-size: 12px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: 16px; }
 
-  /* ── Dropzone ── */
   .dropzone { border: 2px dashed var(--border); border-radius: 8px; padding: 40px 20px; text-align: center; cursor: pointer; transition: border-color .2s, background .2s; position: relative; }
   .dropzone.drag { border-color: var(--accent); background: rgba(124,106,255,.06); }
   .dropzone input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
@@ -68,7 +64,6 @@
   .dropzone-label { color: var(--text); font-size: 15px; font-weight: 500; }
   .dropzone-sub { color: var(--muted); font-size: 13px; margin-top: 4px; }
 
-  /* ── ID preview ── */
   #id-preview { margin-top: 16px; display: none; }
   .id-preview-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
   .id-count { font-size: 13px; color: var(--muted); }
@@ -77,7 +72,6 @@
   .id-scroll::-webkit-scrollbar { width: 4px; }
   .id-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
 
-  /* ── Config fields ── */
   .config-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px; }
   @media (max-width: 520px) { .config-row { grid-template-columns: 1fr; } }
   .field label { display: block; font-size: 11px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
@@ -89,7 +83,6 @@
   .field input::placeholder { color: var(--muted); }
   .field select option { background: var(--surface); }
 
-  /* ── Buttons ── */
   .action-buttons { display: flex; gap: 10px; margin-top: 20px; }
   .btn-action {
     flex: 1; padding: 14px; font-weight: 700; font-size: 14px;
@@ -103,14 +96,12 @@
   #btn-upload { background: #1e293b; color: var(--accent2); border: 1px solid var(--border); }
   #btn-spoof  { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff; }
 
-  /* ── Progress ── */
   #progress-card { display: none; }
   .progress-bar-wrap { background: var(--bg); border-radius: 999px; height: 6px; overflow: hidden; margin-bottom: 10px; }
   .progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 999px; transition: width .4s ease; width: 0%; }
   .progress-label { font-size: 13px; color: var(--muted); }
   .progress-label span { color: var(--text); font-weight: 600; }
 
-  /* ── Log ── */
   #log-wrap { margin-top: 14px; display: none; }
   .log-box { background: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: 10px 12px; max-height: 180px; overflow-y: auto; font-family: var(--mono); font-size: 11px; line-height: 1.8; }
   .log-box::-webkit-scrollbar { width: 4px; }
@@ -120,7 +111,6 @@
   .log-info { color: var(--muted); }
   .log-warn { color: var(--warn); }
 
-  /* ── Results ── */
   #results-card { display: none; }
   .result-actions { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
   .btn-sm { padding: 7px 14px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; border: 1px solid var(--border); background: var(--bg); color: var(--text); transition: background .15s; }
@@ -140,14 +130,14 @@
   .copy-btn.copied { background: var(--ok); color: #000; }
   .error-msg { color: var(--err); font-size: 11px; max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-  /* ── Info box ── */
   .info-box { background: rgba(124,106,255,.07); border: 1px solid rgba(124,106,255,.22); border-radius: 8px; padding: 14px 16px; font-size: 12px; color: var(--muted); line-height: 1.7; margin-top: 14px; }
   .info-box strong { color: var(--accent2); }
   .info-box code { background: rgba(255,255,255,.05); padding: 1px 5px; border-radius: 3px; font-family: var(--mono); font-size: 11px; }
 
-  /* ── Toast ── */
   #toast { position: fixed; bottom: 28px; right: 28px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 12px 18px; font-size: 13px; color: var(--text); opacity: 0; transform: translateY(10px); transition: opacity .25s, transform .25s; pointer-events: none; z-index: 999; }
   #toast.show { opacity: 1; transform: translateY(0); }
+
+  .chunk-note { font-size: 11px; color: var(--warn); margin-top: 6px; }
 </style>
 </head>
 <body>
@@ -159,15 +149,12 @@
     Upload .txt berisi list ID — parsing otomatis semua format, strip metadata creator,
     re-upload ke akun kamu via Open Cloud API.
   </p>
-
-  <!-- Proxy health indicator -->
-  <div class="proxy-status" id="proxy-status" onclick="checkProxy()" title="Klik untuk re-check proxy">
-    <div class="proxy-dot" id="proxy-dot"></div>
-    <span id="proxy-label">Proxy: checking…</span>
+  <div class="api-status" id="api-status" onclick="checkApi()" title="Klik untuk re-check">
+    <div class="api-dot" id="api-dot"></div>
+    <span id="api-label">API: checking…</span>
   </div>
 </header>
 
-<!-- ── Input card ── -->
 <div class="card">
   <div class="card-title">Input</div>
 
@@ -209,17 +196,17 @@
     </div>
     <div class="field">
       <label>Concurrency (upload paralel)</label>
-      <input type="number" id="concurrency" value="3" min="1" max="10" />
+      <input type="number" id="concurrency" value="3" min="1" max="5" />
     </div>
   </div>
 
   <div class="info-box">
-    <strong>Cara kerja Spoof Upload:</strong><br>
-    1. Asset diunduh dari Roblox CDN lewat <code>proxy :3131/delivery/:id</code><br>
-    2. Dikirim ke proxy <code>/upload</code> → proxy build multipart → forward ke Open Cloud <code>POST /v1/assets</code><br>
-    3. Proxy poll <code>/v1/operations/:id</code> dan return <code>assetId</code> baru.<br><br>
-    API Key butuh permission <strong>asset:write</strong> + <strong>asset:read</strong>.
-    Jalankan dulu: <code>node proxy.js</code>
+    <strong>Cara kerja:</strong><br>
+    1. ID dikirim ke <code>/api/batch</code> (serverless Vercel)<br>
+    2. Server download asset dari Roblox CDN → build multipart → upload ke Open Cloud <code>POST /v1/assets</code><br>
+    3. Poll <code>/v1/operations/:id</code> sampai <code>assetId</code> baru keluar<br><br>
+    API Key butuh permission <strong>asset:write</strong> + <strong>asset:read</strong>.<br>
+    Vercel timeout max 300 detik — batch besar dipecah otomatis per 50 ID.
   </div>
 
   <div class="action-buttons">
@@ -232,7 +219,6 @@
   </div>
 </div>
 
-<!-- ── Progress card ── -->
 <div class="card" id="progress-card">
   <div class="card-title">Progress</div>
   <div class="progress-bar-wrap">
@@ -247,7 +233,6 @@
   </div>
 </div>
 
-<!-- ── Results card ── -->
 <div class="card" id="results-card">
   <div class="card-title">Hasil</div>
   <div class="result-actions">
@@ -275,36 +260,43 @@
 <div id="toast"></div>
 
 <script>
-// ── Config ──
-const PROXY = "http://localhost:3131";
-
 // ── State ──
 let parsedIds    = [];
 let batchResults = [];
 let running      = false;
 
-// ── Proxy health check ──
-async function checkProxy() {
-  const dot   = document.getElementById("proxy-dot");
-  const label = document.getElementById("proxy-label");
-  dot.className = "proxy-dot";
-  label.textContent = "Proxy: checking…";
+const CHUNK_SIZE = 50; // IDs per /api/batch call (Vercel 300s limit)
+
+// ── API health check ──
+async function checkApi() {
+  const dot   = document.getElementById("api-dot");
+  const label = document.getElementById("api-label");
+  dot.className = "api-dot";
+  label.textContent = "API: checking…";
   try {
-    const res = await fetch(`${PROXY}/health`, { signal: AbortSignal.timeout(3000) });
-    const data = await res.json();
-    dot.className = "proxy-dot ok";
-    label.textContent = `Proxy: online (Node ${data.node})`;
+    const res = await fetch("/api/batch", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ids: [], apiKey: "ping", userId: "0" }),
+      signal: AbortSignal.timeout(5000),
+    });
+    // 400 = endpoint hidup tapi bad request → itu normal, berarti online
+    if (res.status === 400 || res.ok) {
+      dot.className = "api-dot ok";
+      label.textContent = "API: online (/api/batch ready)";
+    } else {
+      throw new Error(res.status);
+    }
   } catch {
-    dot.className = "proxy-dot fail";
-    label.textContent = "Proxy: offline — jalankan node proxy.js";
+    dot.className = "api-dot fail";
+    label.textContent = "API: tidak terdeteksi";
   }
 }
-// Auto-check on load + every 30s
-checkProxy();
-setInterval(checkProxy, 30000);
+checkApi();
+setInterval(checkApi, 30000);
 
 // ── File input ──
-const dropzone = document.getElementById("dropzone");
+const dropzone  = document.getElementById("dropzone");
 const fileInput = document.getElementById("file-input");
 
 dropzone.addEventListener("dragover",  e => { e.preventDefault(); dropzone.classList.add("drag"); });
@@ -321,33 +313,19 @@ fileInput.addEventListener("change", () => {
 function handleFile(file) {
   const reader = new FileReader();
   reader.onload = e => {
-    const text = e.target.result;
+    const text  = e.target.result;
     const idSet = new Set();
 
-    // Pattern 1: rbxassetid://NUMBER
-    for (const m of text.matchAll(/rbxassetid:\/\/(\d{6,})/gi))
-      idSet.add(m[1]);
-
-    // Pattern 2: SoundId / ImageId / AnimationId = "rbxassetid://NUMBER"
-    for (const m of text.matchAll(/(?:Sound|Image|Animation|Asset)Id\s*=\s*["']?rbxassetid:\/\/(\d{6,})["']?/gi))
-      idSet.add(m[1]);
-
-    // Pattern 3: pipe-separated  NUMBER|Name
-    for (const m of text.matchAll(/^(\d{6,})\|/gm))
-      idSet.add(m[1]);
-
-    // Pattern 4: standalone ≥10 digit numbers
-    for (const m of text.matchAll(/(?<![\/\d])(\d{10,})(?!\d)/g))
-      idSet.add(m[1]);
-
-    // Fallback: any ≥6-digit token separated by whitespace/comma/semicolon
+    for (const m of text.matchAll(/rbxassetid:\/\/(\d{6,})/gi))                                     idSet.add(m[1]);
+    for (const m of text.matchAll(/(?:Sound|Image|Animation|Asset)Id\s*=\s*["']?rbxassetid:\/\/(\d{6,})["']?/gi)) idSet.add(m[1]);
+    for (const m of text.matchAll(/^(\d{6,})\|/gm))                                                 idSet.add(m[1]);
+    for (const m of text.matchAll(/(?<![\/\d])(\d{10,})(?!\d)/g))                                   idSet.add(m[1]);
     for (const tok of text.split(/[\r\n,;\s|]+/)) {
       const t = tok.trim();
       if (/^\d{6,}$/.test(t)) idSet.add(t);
     }
 
     parsedIds = [...idSet];
-
     document.getElementById("id-count-num").textContent    = parsedIds.length;
     document.getElementById("id-scroll-content").textContent = parsedIds.join("  |  ");
     document.getElementById("id-preview").style.display    = "block";
@@ -385,100 +363,6 @@ function log(msg, cls = "log-info") {
   box.scrollTop = box.scrollHeight;
 }
 
-// ── Helpers ──
-function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
-
-function bufToBase64(buffer) {
-  // Uint8Array → base64 string
-  const bytes = new Uint8Array(buffer);
-  let bin = "";
-  for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
-  return btoa(bin);
-}
-
-// ── Core: download asset binary via proxy ──
-async function downloadAsset(id) {
-  const res = await fetch(`${PROXY}/delivery/${id}`);
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({ error: res.statusText }));
-    throw new Error(err.error || `Delivery ${res.status}`);
-  }
-  return await res.arrayBuffer();
-}
-
-// ── Core: upload via proxy ──
-async function uploadAsset(apiKey, userId, assetType, displayName, fileBuffer) {
-  const body = {
-    apiKey,
-    userId,
-    assetType,
-    displayName,
-    fileBase64: bufToBase64(fileBuffer),
-  };
-
-  const res = await fetch(`${PROXY}/upload`, {
-    method:  "POST",
-    headers: { "Content-Type": "application/json" },
-    body:    JSON.stringify(body),
-  });
-
-  const data = await res.json().catch(() => ({}));
-  if (!res.ok) throw new Error(data.error || `Upload ${res.status}`);
-  return data; // { operationId, path, done, ... }
-}
-
-// ── Core: poll operation via proxy ──
-async function pollOperation(apiKey, operationId, maxAttempts = 25) {
-  for (let i = 0; i < maxAttempts; i++) {
-    await sleep(2500);
-    const res = await fetch(`${PROXY}/poll/${encodeURIComponent(operationId)}`, {
-      headers: { "x-api-key": apiKey },
-    });
-    if (!res.ok) continue;
-    const data = await res.json();
-    if (data.done) {
-      if (data.error) throw new Error(data.error.message || "Operation failed");
-      return String(data.response?.assetId || data.response?.Id || "");
-    }
-  }
-  throw new Error("Timeout: operation did not complete in time");
-}
-
-// ── Single asset processor ──
-async function processId(id, apiKey, userId, assetType, mode) {
-  log(`→ ${id}  [${mode}]`);
-  try {
-    const buffer = await downloadAsset(id);
-    log(`  ✓ Downloaded ${id}  (${(buffer.byteLength / 1024).toFixed(1)} KB)`, "log-ok");
-
-    const displayName = `${mode === "spoof" ? "spoof" : "reup"}_${id}`;
-    const op = await uploadAsset(apiKey, userId, assetType, displayName, buffer);
-
-    // Extract operationId — OC can return { path: "operations/XXXX" } or { operationId: "XXXX" }
-    const opId = op.operationId
-      || (op.path && op.path.split("/").pop())
-      || null;
-
-    if (!opId) throw new Error("No operationId in upload response: " + JSON.stringify(op));
-
-    log(`  ↑ Queued  operationId=${opId}`, "log-info");
-
-    const newId = await pollOperation(apiKey, opId);
-    if (!newId) throw new Error("Operation done but no assetId returned");
-
-    log(`  ✓ Done → ${newId}`, "log-ok");
-    return {
-      originalId: id,
-      status:     "done",
-      newId,
-      robloxLink: `https://www.roblox.com/catalog/${newId}`,
-    };
-  } catch (err) {
-    log(`  ✗ ${id}: ${err.message}`, "log-err");
-    return { originalId: id, status: "error", error: err.message };
-  }
-}
-
 // ── Batch runner ──
 async function runBatch(mode) {
   if (running) return;
@@ -488,7 +372,7 @@ async function runBatch(mode) {
   const apiKey      = document.getElementById("api-key").value.trim();
   const userId      = document.getElementById("user-id").value.trim();
   const assetType   = document.getElementById("asset-type").value;
-  const concurrency = Math.max(1, Math.min(10,
+  const concurrency = Math.max(1, Math.min(5,
     parseInt(document.getElementById("concurrency").value, 10) || 3));
 
   document.getElementById("progress-card").style.display = "block";
@@ -497,29 +381,60 @@ async function runBatch(mode) {
   document.getElementById("log-wrap").style.display      = "none";
   batchResults = [];
 
-  log(`Batch start — ${parsedIds.length} IDs  mode:${mode}  concurrency:${concurrency}`, "log-warn");
+  const total  = parsedIds.length;
+  const chunks = chunkArray(parsedIds, CHUNK_SIZE);
 
-  const total   = parsedIds.length;
-  const queue   = [...parsedIds];
-  const results = new Array(total);
-  let done      = 0;
+  log(`Batch start — ${total} IDs  mode:${mode}  concurrency:${concurrency}  chunks:${chunks.length}`, "log-warn");
 
-  const idIndex = {};
-  parsedIds.forEach((id, i) => { idIndex[id] = i; });
+  let done = 0;
 
-  async function worker() {
-    while (queue.length > 0) {
-      const id  = queue.shift();
-      const idx = idIndex[id];
-      results[idx] = await processId(id, apiKey, userId, assetType, mode);
-      done++;
-      setProgress(done, total, `Processed ${done} / ${total}`);
+  for (let ci = 0; ci < chunks.length; ci++) {
+    const chunk = chunks[ci];
+    log(`Chunk ${ci + 1}/${chunks.length} — ${chunk.length} IDs`, "log-info");
+
+    try {
+      const res = await fetch("/api/batch", {
+        method:  "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ids: chunk, apiKey, userId, assetType, concurrency, mode }),
+      });
+
+      if (!res.ok) {
+        const err = await res.text().catch(() => res.statusText);
+        log(`Chunk ${ci + 1} gagal — HTTP ${res.status}: ${err.slice(0, 200)}`, "log-err");
+        // Mark all in chunk as error
+        for (const id of chunk) {
+          batchResults.push({ originalId: id, status: "error", error: `Chunk failed: HTTP ${res.status}` });
+          done++;
+          setProgress(done, total, `Processed ${done} / ${total}`);
+        }
+        continue;
+      }
+
+      const data = await res.json();
+      const results = data.results ?? [];
+
+      for (const r of results) {
+        batchResults.push(r);
+        done++;
+        if (r.status === "done") {
+          log(`✓ ${r.originalId} → ${r.newId}`, "log-ok");
+        } else {
+          log(`✗ ${r.originalId}: ${r.error}`, "log-err");
+        }
+        setProgress(done, total, `Processed ${done} / ${total}`);
+      }
+
+    } catch (err) {
+      log(`Chunk ${ci + 1} error: ${err.message}`, "log-err");
+      for (const id of chunk) {
+        batchResults.push({ originalId: id, status: "error", error: err.message });
+        done++;
+        setProgress(done, total, `Processed ${done} / ${total}`);
+      }
     }
   }
 
-  await Promise.all(Array.from({ length: concurrency }, worker));
-
-  batchResults = results;
   setProgress(total, total, "Selesai ✓");
   renderResults();
   running = false;
@@ -529,10 +444,16 @@ async function runBatch(mode) {
   toast(`Batch selesai — ${ok} sukses, ${total - ok} gagal.`);
 }
 
+function chunkArray(arr, size) {
+  const out = [];
+  for (let i = 0; i < arr.length; i += size) out.push(arr.slice(i, i + size));
+  return out;
+}
+
 function setProgress(done, total, label) {
   const pct = total > 0 ? Math.round((done / total) * 100) : 0;
-  document.getElementById("progress-fill").style.width  = pct + "%";
-  document.getElementById("progress-text").textContent  = label;
+  document.getElementById("progress-fill").style.width   = pct + "%";
+  document.getElementById("progress-text").textContent   = label;
   document.getElementById("progress-detail").textContent = `${done} / ${total}`;
 }
 
@@ -581,7 +502,7 @@ function exportTxt() {
 function exportCsv() {
   const hdr  = "original_id,new_id,status,error\n";
   const rows = batchResults.map(r =>
-    `${r.originalId},${r.newId || ""},${r.status},"${(r.error || "").replace(/"/g, "'")}"`
+    `${r.originalId},${r.newId || ""},${r.status},"${(r.error || "").replace(/"/g,"'")}"`
   ).join("\n");
   dl("results.csv", hdr + rows);
 }

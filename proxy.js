@@ -1,13 +1,7 @@
-// proxy.js — AnimReup local CORS proxy
+// proxy.js — AnimReup local CORS proxy (FIXED VERSION)
 // Runtime : Node 18+  (native fetch built-in)
 // Usage   : npm install && node proxy.js
 // Port    : 3131  (override with PORT env var)
-//
-// Routes
-//   GET  /delivery/:assetId     → resolves CDN location + streams binary back
-//   POST /upload                → builds multipart via form-data pkg → Open Cloud
-//   GET  /poll/:operationId     → polls Open Cloud operation
-//   GET  /health                → sanity check
 
 import { createServer }  from "http";
 import FormData          from "form-data";
@@ -42,30 +36,48 @@ function readBody(req) {
 }
 
 // ── Route: GET /delivery/:assetId ────────────────────────────────────────────
-// 1. Hit assetdelivery API → get CDN redirect URL
-// 2. Download binary from CDN
-// 3. Stream binary back to browser
+// FIXED: Menggunakan endpoint Open Cloud yang baru dan mewajibkan x-api-key
 
-async function handleDelivery(res, assetId) {
+async function handleDelivery(req, res, assetId) {
+  const apiKey = req.headers["x-api-key"];
+  if (!apiKey) {
+    return sendErr(res, 400, "Missing x-api-key header untuk download");
+  }
+
   try {
+    // 1. Hit API Open Cloud yang BARU
     const infoRes = await fetch(
-      `https://assetdelivery.roblox.com/v1/assetId/${assetId}`,
-      { headers: { Accept: "application/json" }, redirect: "follow" }
+      `https://apis.roblox.com/asset-delivery-api/v1/assetId/${assetId}`,
+      { 
+        headers: { 
+          "x-api-key": apiKey,
+          "Accept": "application/json" 
+        }, 
+        redirect: "follow" 
+      }
     );
-    if (!infoRes.ok)
-      return sendErr(res, 502, `Delivery API: ${infoRes.status}`);
+    
+    if (!infoRes.ok) {
+      const errText = await infoRes.text();
+      // Jika error 403, berarti aset privat atau API Key tidak punya akses
+      return sendErr(res, infoRes.status, `Delivery API Gagal: ${infoRes.status} - ${errText}`);
+    }
 
     const info   = await infoRes.json();
     const cdnUrl = info.location;
-    if (!cdnUrl)
-      return sendErr(res, 502, "Delivery API: no location field");
+    if (!cdnUrl) {
+      return sendErr(res, 502, "Delivery API: field 'location' tidak ditemukan");
+    }
 
+    // 2. Download binary asli dari CDN Roblox
     const fileRes = await fetch(cdnUrl);
-    if (!fileRes.ok)
-      return sendErr(res, 502, `CDN download: ${fileRes.status}`);
+    if (!fileRes.ok) {
+      return sendErr(res, 502, `CDN download gagal: ${fileRes.status}`);
+    }
 
     const buffer = Buffer.from(await fileRes.arrayBuffer());
 
+    // 3. Kirim balik ke browser
     res.writeHead(200, {
       ...CORS,
       "Content-Type":   "application/octet-stream",
@@ -79,8 +91,7 @@ async function handleDelivery(res, assetId) {
 }
 
 // ── Route: POST /upload ───────────────────────────────────────────────────────
-// Body JSON: { apiKey, userId, assetType, displayName, fileBase64 }
-// Uses form-data package to build multipart → forwards to Open Cloud
+// (Tidak banyak berubah, hanya perapian)
 
 async function handleUpload(req, res) {
   try {
@@ -95,12 +106,12 @@ async function handleUpload(req, res) {
 
     const fileBuffer = Buffer.from(fileBase64, "base64");
 
-    // ── Build multipart using form-data ──
+    // Build multipart
     const form = new FormData();
 
     form.append("request", JSON.stringify({
-      assetType,
-      displayName: displayName || `animreup_${Date.now()}`,
+      assetType: assetType,
+      displayName: displayName || `Reup_${Date.now()}`,
       description: "",
       creationContext: {
         creator: { userId: parseInt(userId, 10) }
@@ -113,9 +124,9 @@ async function handleUpload(req, res) {
       knownLength: fileBuffer.byteLength,
     });
 
-    // form-data gives us the correct Content-Type header with boundary
     const formHeaders = form.getHeaders();
 
+    // Upload ke Open Cloud
     const ocRes = await fetch("https://apis.roblox.com/assets/v1/assets", {
       method:  "POST",
       headers: {
@@ -131,7 +142,7 @@ async function handleUpload(req, res) {
     catch { ocJson = { raw: ocText }; }
 
     if (!ocRes.ok)
-      return sendErr(res, ocRes.status, `Open Cloud: ${ocText.slice(0, 200)}`);
+      return sendErr(res, ocRes.status, `Open Cloud Upload Gagal: ${ocText.slice(0, 200)}`);
 
     sendJson(res, 200, ocJson);
   } catch (e) {
@@ -162,7 +173,7 @@ async function handlePoll(req, res, operationId) {
   }
 }
 
-// ── Main server ───────────────────────────────────────────────────────────────
+// ── Main Server ───────────────────────────────────────────────────────────────
 
 const server = createServer(async (req, res) => {
   const url  = new URL(req.url, `http://localhost:${PORT}`);
@@ -177,8 +188,9 @@ const server = createServer(async (req, res) => {
     return sendJson(res, 200, { status: "ok", port: PORT, node: process.version });
 
   const deliveryMatch = path.match(/^\/delivery\/(\d+)$/);
+  // FIXED: Oper req ke handleDelivery agar bisa ambil header
   if (deliveryMatch && req.method === "GET")
-    return handleDelivery(res, deliveryMatch[1]);
+    return handleDelivery(req, res, deliveryMatch[1]); 
 
   if (path === "/upload" && req.method === "POST")
     return handleUpload(req, res);
@@ -191,11 +203,10 @@ const server = createServer(async (req, res) => {
 });
 
 server.listen(PORT, "127.0.0.1", () => {
-  console.log(`\n  AnimReup Proxy  →  http://localhost:${PORT}`);
-  console.log(`  Node            →  ${process.version}`);
-  console.log(`  form-data       →  ${FormData.name} (npm pkg)`);
+  console.log(`\n  AnimReup Proxy (FIXED) →  http://localhost:${PORT}`);
+  console.log(`  Node                   →  ${process.version}`);
   console.log(`  Routes:`);
-  console.log(`    GET  /delivery/:assetId`);
+  console.log(`    GET  /delivery/:assetId (Butuh header x-api-key)`);
   console.log(`    POST /upload`);
   console.log(`    GET  /poll/:operationId`);
   console.log(`    GET  /health\n`);

@@ -1,27 +1,25 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>AnimReup — Roblox Animation Reuploader</title>
+<title>AnimReup — Roblox Asset Reuploader</title>
 <style>
   :root {
-    --bg:       #0a0a0f;
-    --surface:  #111118;
-    --border:   #1e1e2e;
-    --accent:   #7c6aff;
-    --accent2:  #a78bfa;
-    --ok:       #34d399;
-    --err:      #f87171;
-    --warn:     #fbbf24;
-    --text:     #e2e8f0;
-    --muted:    #64748b;
-    --mono:     'JetBrains Mono', 'Cascadia Code', monospace;
-    --sans:     'Inter', system-ui, sans-serif;
+    --bg:      #0a0a0f;
+    --surface: #111118;
+    --border:  #1e1e2e;
+    --accent:  #7c6aff;
+    --accent2: #a78bfa;
+    --ok:      #34d399;
+    --err:     #f87171;
+    --warn:    #fbbf24;
+    --text:    #e2e8f0;
+    --muted:   #64748b;
+    --mono:    'JetBrains Mono', 'Cascadia Code', monospace;
+    --sans:    'Inter', system-ui, sans-serif;
   }
-
   * { box-sizing: border-box; margin: 0; padding: 0; }
-
   body {
     background: var(--bg);
     color: var(--text);
@@ -32,287 +30,102 @@
     align-items: center;
     padding: 40px 16px 80px;
   }
-
-  /* ── Header ── */
-  header {
-    width: 100%;
-    max-width: 760px;
-    margin-bottom: 40px;
-  }
-  .logo {
-    font-size: 11px;
-    letter-spacing: .18em;
-    color: var(--accent);
-    text-transform: uppercase;
-    font-weight: 600;
-    margin-bottom: 8px;
-  }
-  h1 {
-    font-size: clamp(1.6rem, 4vw, 2.4rem);
-    font-weight: 700;
-    line-height: 1.1;
-    color: #fff;
-  }
+  header { width: 100%; max-width: 760px; margin-bottom: 40px; }
+  .logo { font-size: 11px; letter-spacing: .18em; color: var(--accent); text-transform: uppercase; font-weight: 600; margin-bottom: 8px; }
+  h1 { font-size: clamp(1.6rem,4vw,2.4rem); font-weight: 700; line-height: 1.1; color: #fff; }
   h1 span { color: var(--accent2); }
-  .subtitle {
-    margin-top: 8px;
-    color: var(--muted);
-    font-size: 14px;
-    max-width: 500px;
-    line-height: 1.6;
-  }
-
-  /* ── Card ── */
-  .card {
-    width: 100%;
-    max-width: 760px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 28px;
-    margin-bottom: 20px;
-  }
-  .card-title {
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: .12em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 16px;
-  }
-
-  /* ── Drop zone ── */
-  .dropzone {
-    border: 2px dashed var(--border);
-    border-radius: 8px;
-    padding: 40px 20px;
-    text-align: center;
-    cursor: pointer;
-    transition: border-color .2s, background .2s;
-    position: relative;
-  }
+  .subtitle { margin-top: 8px; color: var(--muted); font-size: 14px; max-width: 500px; line-height: 1.6; }
+  .card { width: 100%; max-width: 760px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 28px; margin-bottom: 20px; }
+  .card-title { font-size: 12px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: 16px; }
+  .dropzone { border: 2px dashed var(--border); border-radius: 8px; padding: 40px 20px; text-align: center; cursor: pointer; transition: border-color .2s, background .2s; position: relative; }
   .dropzone.drag { border-color: var(--accent); background: rgba(124,106,255,.06); }
-  .dropzone input[type=file] {
-    position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
-  }
+  .dropzone input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
   .dropzone-icon { font-size: 32px; margin-bottom: 10px; }
   .dropzone-label { color: var(--text); font-size: 15px; font-weight: 500; }
   .dropzone-sub { color: var(--muted); font-size: 13px; margin-top: 4px; }
-
-  /* ── ID preview list ── */
-  #id-preview {
-    margin-top: 16px;
-    display: none;
-  }
-  .id-preview-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 8px;
-  }
-  .id-count {
-    font-size: 13px;
-    color: var(--muted);
-  }
+  #id-preview { margin-top: 16px; display: none; }
+  .id-preview-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .id-count { font-size: 13px; color: var(--muted); }
   .id-count strong { color: var(--accent2); }
-  .id-scroll {
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 12px;
-    max-height: 140px;
-    overflow-y: auto;
-    font-family: var(--mono);
-    font-size: 12px;
-    color: var(--muted);
-    line-height: 1.8;
-    word-break: break-all;
-  }
+  .id-scroll { background: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: 12px; max-height: 140px; overflow-y: auto; font-family: var(--mono); font-size: 12px; color: var(--muted); line-height: 1.8; word-break: break-all; }
   .id-scroll::-webkit-scrollbar { width: 4px; }
   .id-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
-
-  /* ── Config row ── */
-  .config-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    margin-top: 20px;
-  }
+  .config-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px; }
   @media (max-width: 520px) { .config-row { grid-template-columns: 1fr; } }
-  .field label {
-    display: block;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: .1em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 6px;
+  .field label { display: block; font-size: 11px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+  .field input, .field select {
+    width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: 6px;
+    padding: 10px 12px; color: var(--text); font-family: var(--mono); font-size: 13px; outline: none; transition: border-color .2s;
   }
-  .field input {
-    width: 100%;
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 10px 12px;
-    color: var(--text);
-    font-family: var(--mono);
-    font-size: 13px;
-    outline: none;
-    transition: border-color .2s;
-  }
-  .field input:focus { border-color: var(--accent); }
+  .field input:focus, .field select:focus { border-color: var(--accent); }
   .field input::placeholder { color: var(--muted); }
+  .field select option { background: var(--surface); }
 
-  /* ── Mode selector ── */
-  .mode-opt {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 13px;
-    color: var(--text);
-    cursor: pointer;
-    padding: 8px 12px;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    background: var(--bg);
-    transition: border-color .2s;
+  /* ── Two main action buttons ── */
+  .action-buttons { display: flex; gap: 10px; margin-top: 20px; }
+  .btn-action {
     flex: 1;
-  }
-  .mode-opt:has(input:checked) { border-color: var(--accent); background: rgba(124,106,255,.06); }
-  .mode-opt input[type=radio] { accent-color: var(--accent); }
-
-  /* ── Run button ── */
-  #run-btn {
-    margin-top: 20px;
-    width: 100%;
     padding: 14px;
-    background: var(--accent);
-    color: #fff;
     font-weight: 700;
-    font-size: 15px;
+    font-size: 14px;
     border: none;
     border-radius: 8px;
     cursor: pointer;
     transition: opacity .2s, transform .1s;
     letter-spacing: .02em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
   }
-  #run-btn:hover:not(:disabled) { opacity: .9; }
-  #run-btn:active:not(:disabled) { transform: scale(.99); }
-  #run-btn:disabled { opacity: .4; cursor: not-allowed; }
+  .btn-action:hover:not(:disabled) { opacity: .88; }
+  .btn-action:active:not(:disabled) { transform: scale(.99); }
+  .btn-action:disabled { opacity: .35; cursor: not-allowed; }
+  #btn-upload { background: #1e293b; color: var(--accent2); border: 1px solid var(--border); }
+  #btn-spoof  { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff; }
 
   /* ── Progress ── */
   #progress-card { display: none; }
-  .progress-bar-wrap {
-    background: var(--bg);
-    border-radius: 999px;
-    height: 6px;
-    overflow: hidden;
-    margin-bottom: 10px;
-  }
-  .progress-bar-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--accent), var(--accent2));
-    border-radius: 999px;
-    transition: width .4s ease;
-    width: 0%;
-  }
+  .progress-bar-wrap { background: var(--bg); border-radius: 999px; height: 6px; overflow: hidden; margin-bottom: 10px; }
+  .progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 999px; transition: width .4s ease; width: 0%; }
   .progress-label { font-size: 13px; color: var(--muted); }
   .progress-label span { color: var(--text); font-weight: 600; }
 
-  /* ── Results table ── */
+  /* ── Log ── */
+  #log-wrap { margin-top: 14px; display: none; }
+  .log-box { background: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: 10px 12px; max-height: 160px; overflow-y: auto; font-family: var(--mono); font-size: 11px; line-height: 1.8; }
+  .log-box::-webkit-scrollbar { width: 4px; }
+  .log-box::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+  .log-ok   { color: var(--ok); }
+  .log-err  { color: var(--err); }
+  .log-info { color: var(--muted); }
+  .log-warn { color: var(--warn); }
+
+  /* ── Results ── */
   #results-card { display: none; }
-  .result-actions {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 16px;
-  }
-  .btn-sm {
-    padding: 7px 14px;
-    border-radius: 6px;
-    font-size: 12px;
-    font-weight: 600;
-    cursor: pointer;
-    border: 1px solid var(--border);
-    background: var(--bg);
-    color: var(--text);
-    transition: background .15s;
-  }
+  .result-actions { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+  .btn-sm { padding: 7px 14px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; border: 1px solid var(--border); background: var(--bg); color: var(--text); transition: background .15s; }
   .btn-sm:hover { background: var(--border); }
   .btn-sm.primary { border-color: var(--accent); color: var(--accent2); }
-
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 13px;
-  }
-  thead th {
-    text-align: left;
-    padding: 8px 10px;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: .1em;
-    text-transform: uppercase;
-    color: var(--muted);
-    border-bottom: 1px solid var(--border);
-  }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  thead th { text-align: left; padding: 8px 10px; font-size: 11px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); border-bottom: 1px solid var(--border); }
   tbody tr { border-bottom: 1px solid var(--border); }
   tbody tr:last-child { border-bottom: none; }
-  tbody td {
-    padding: 10px 10px;
-    font-family: var(--mono);
-    vertical-align: middle;
-  }
-  .status-badge {
-    display: inline-block;
-    padding: 2px 8px;
-    border-radius: 999px;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: .06em;
-  }
+  tbody td { padding: 10px 10px; font-family: var(--mono); vertical-align: middle; }
+  .status-badge { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 700; letter-spacing: .06em; }
   .s-done    { background: rgba(52,211,153,.12); color: var(--ok); }
   .s-error   { background: rgba(248,113,113,.12); color: var(--err); }
   .s-pending { background: rgba(251,191,36,.12);  color: var(--warn); }
-  .copy-btn {
-    padding: 3px 8px;
-    background: var(--border);
-    border: none;
-    border-radius: 4px;
-    color: var(--text);
-    font-family: var(--mono);
-    font-size: 11px;
-    cursor: pointer;
-    transition: background .15s;
-  }
+  .copy-btn { padding: 3px 8px; background: var(--border); border: none; border-radius: 4px; color: var(--text); font-family: var(--mono); font-size: 11px; cursor: pointer; transition: background .15s; }
   .copy-btn:hover { background: var(--accent); }
   .copy-btn.copied { background: var(--ok); color: #000; }
+  .error-msg { color: var(--err); font-size: 11px; max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-  .error-msg {
-    color: var(--err);
-    font-size: 11px;
-    max-width: 200px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
+  /* ── Info box ── */
+  .info-box { background: rgba(124,106,255,.07); border: 1px solid rgba(124,106,255,.22); border-radius: 8px; padding: 14px 16px; font-size: 12px; color: var(--muted); line-height: 1.7; margin-top: 14px; }
+  .info-box strong { color: var(--accent2); }
 
-  /* ── Toast ── */
-  #toast {
-    position: fixed;
-    bottom: 28px;
-    right: 28px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 12px 18px;
-    font-size: 13px;
-    color: var(--text);
-    opacity: 0;
-    transform: translateY(10px);
-    transition: opacity .25s, transform .25s;
-    pointer-events: none;
-    z-index: 999;
-  }
+  #toast { position: fixed; bottom: 28px; right: 28px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 12px 18px; font-size: 13px; color: var(--text); opacity: 0; transform: translateY(10px); transition: opacity .25s, transform .25s; pointer-events: none; z-index: 999; }
   #toast.show { opacity: 1; transform: translateY(0); }
 </style>
 </head>
@@ -320,8 +133,8 @@
 
 <header>
   <div class="logo">AnimReup</div>
-  <h1>Roblox Animation<br><span>Reuploader</span></h1>
-  <p class="subtitle">Upload .txt berisi list ID animasi — download aset, strip creator metadata, re-upload ke akun kamu. ID baru tercatat sebagai milik kamu.</p>
+  <h1>Roblox Asset<br><span>Reuploader</span></h1>
+  <p class="subtitle">Upload .txt berisi list ID — parsing otomatis semua format, strip metadata creator, re-upload ke akun kamu via Open Cloud API.</p>
 </header>
 
 <!-- Upload card -->
@@ -329,10 +142,10 @@
   <div class="card-title">Input</div>
 
   <div class="dropzone" id="dropzone">
-    <input type="file" id="file-input" accept=".txt" />
+    <input type="file" id="file-input" accept=".txt,.csv,.lua" />
     <div class="dropzone-icon">📄</div>
-    <div class="dropzone-label">Drop file .txt di sini</div>
-    <div class="dropzone-sub">atau klik untuk pilih file</div>
+    <div class="dropzone-label">Drop file di sini (.txt / .csv / .lua)</div>
+    <div class="dropzone-sub">atau klik untuk pilih — semua format ID dideteksi otomatis</div>
   </div>
 
   <div id="id-preview">
@@ -355,22 +168,35 @@
   </div>
 
   <div class="config-row" style="margin-top:12px;">
-    <div class="field" style="grid-column:1/-1;">
-      <label>Mode</label>
-      <div style="display:flex;gap:8px;margin-top:2px;">
-        <label class="mode-opt">
-          <input type="radio" name="mode" value="spoof" checked />
-          <span>Spoof creator (patch metadata sebelum upload)</span>
-        </label>
-        <label class="mode-opt">
-          <input type="radio" name="mode" value="plain" />
-          <span>Plain reupload (tanpa patch)</span>
-        </label>
-      </div>
+    <div class="field">
+      <label>Tipe Asset</label>
+      <select id="asset-type">
+        <option value="Animation">Animation</option>
+        <option value="Audio">Audio</option>
+        <option value="Image">Image</option>
+        <option value="Model">Model</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>Concurrency (upload paralel)</label>
+      <input type="number" id="concurrency" value="3" min="1" max="10" />
     </div>
   </div>
 
-  <button id="run-btn" onclick="runBatch()" disabled>Mulai Reupload</button>
+  <div class="info-box">
+    <strong>Cara kerja Spoof Upload:</strong> Setiap asset diunduh dari Roblox CDN → metadata creator di-strip / diganti userId kamu → di-upload ulang lewat
+    <code>POST /v1/assets</code> (Open Cloud). ID baru yang muncul di tabel adalah assetId milik akun kamu sendiri.
+    Pastikan API Key punya permission <strong>asset:write</strong> dan <strong>asset:read</strong>.
+  </div>
+
+  <div class="action-buttons">
+    <button class="btn-action" id="btn-upload" onclick="runBatch('plain')" disabled>
+      ⬆ Upload Asset
+    </button>
+    <button class="btn-action" id="btn-spoof" onclick="runBatch('spoof')" disabled>
+      ✦ Spoof Upload to Roblox
+    </button>
+  </div>
 </div>
 
 <!-- Progress card -->
@@ -383,6 +209,9 @@
     <span id="progress-text">Memproses...</span> —
     <span id="progress-detail">0 / 0</span>
   </div>
+  <div id="log-wrap">
+    <div class="log-box" id="log-box"></div>
+  </div>
 </div>
 
 <!-- Results card -->
@@ -392,6 +221,7 @@
     <button class="btn-sm primary" onclick="copyAllIds()">Copy semua ID baru</button>
     <button class="btn-sm" onclick="exportTxt()">Export .txt</button>
     <button class="btn-sm" onclick="exportCsv()">Export .csv</button>
+    <button class="btn-sm" onclick="exportLua()">Export .lua mapping</button>
   </div>
   <div style="overflow-x:auto;">
     <table>
@@ -412,212 +242,334 @@
 <div id="toast"></div>
 
 <script>
-  // ── State ──
-  let parsedIds = [];
-  let batchResults = [];
+// ── State ──
+let parsedIds    = [];
+let batchResults = [];
+let running      = false;
 
-  // ── File input ──
-  const dropzone = document.getElementById("dropzone");
-  const fileInput = document.getElementById("file-input");
+// ── File input ──
+const dropzone = document.getElementById("dropzone");
+const fileInput = document.getElementById("file-input");
 
-  dropzone.addEventListener("dragover", (e) => { e.preventDefault(); dropzone.classList.add("drag"); });
-  dropzone.addEventListener("dragleave", () => dropzone.classList.remove("drag"));
-  dropzone.addEventListener("drop", (e) => {
-    e.preventDefault();
-    dropzone.classList.remove("drag");
-    const f = e.dataTransfer.files[0];
-    if (f) handleFile(f);
-  });
-  fileInput.addEventListener("change", () => {
-    if (fileInput.files[0]) handleFile(fileInput.files[0]);
-  });
+dropzone.addEventListener("dragover", e => { e.preventDefault(); dropzone.classList.add("drag"); });
+dropzone.addEventListener("dragleave", () => dropzone.classList.remove("drag"));
+dropzone.addEventListener("drop", e => {
+  e.preventDefault();
+  dropzone.classList.remove("drag");
+  if (e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]);
+});
+fileInput.addEventListener("change", () => {
+  if (fileInput.files[0]) handleFile(fileInput.files[0]);
+});
 
-  function handleFile(file) {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const text = e.target.result;
-      // Parse: split by newline, comma, space, semicolon — grab all numeric strings
-      parsedIds = text
-        .split(/[\r\n,;\s]+/)
-        .map(s => s.trim())
-        .filter(s => /^\d{6,}$/.test(s)); // at least 6 digits = valid Roblox ID
+function handleFile(file) {
+  const reader = new FileReader();
+  reader.onload = e => {
+    const text = e.target.result;
 
-      document.getElementById("id-count-num").textContent = parsedIds.length;
-      document.getElementById("id-scroll-content").textContent = parsedIds.join("  |  ");
-      document.getElementById("id-preview").style.display = "block";
-      checkReady();
-    };
-    reader.readAsText(file);
-  }
+    // ── Universal ID extraction ──
+    // Matches: rbxassetid://DIGITS, SoundId="...DIGITS", plain DIGITS (≥6 chars)
+    // Priority parse: grab all numeric sequences that are ≥6 digits
+    const idSet = new Set();
 
-  function clearFile() {
-    parsedIds = [];
-    fileInput.value = "";
-    document.getElementById("id-preview").style.display = "none";
+    // Pattern 1: rbxassetid://NUMBER
+    const p1 = text.matchAll(/rbxassetid:\/\/(\d{6,})/gi);
+    for (const m of p1) idSet.add(m[1]);
+
+    // Pattern 2: SoundId="rbxassetid://NUMBER" or ImageId / AnimationId
+    const p2 = text.matchAll(/(?:Sound|Image|Animation|Asset)Id\s*=\s*["']?rbxassetid:\/\/(\d{6,})["']?/gi);
+    for (const m of p2) idSet.add(m[1]);
+
+    // Pattern 3: pipe-separated  ID|Name  (output from music_list.txt style)
+    const p3 = text.matchAll(/^(\d{6,})\|/gm);
+    for (const m of p3) idSet.add(m[1]);
+
+    // Pattern 4: plain numeric IDs on their own (newline / comma / space / semicolon separated)
+    // Only if not already found via above patterns — catch-all
+    const p4 = text.matchAll(/(?<![\/\d])(\d{10,})(?!\d)/g);
+    for (const m of p4) idSet.add(m[1]);
+
+    // Fallback: any ≥6-digit standalone token
+    const p5 = text.split(/[\r\n,;\s|]+/);
+    for (const tok of p5) {
+      const t = tok.trim();
+      if (/^\d{6,}$/.test(t)) idSet.add(t);
+    }
+
+    parsedIds = [...idSet];
+
+    document.getElementById("id-count-num").textContent = parsedIds.length;
+    document.getElementById("id-scroll-content").textContent = parsedIds.join("  |  ");
+    document.getElementById("id-preview").style.display = "block";
     checkReady();
-  }
+  };
+  reader.readAsText(file);
+}
 
-  // ── Input validation ──
-  document.getElementById("api-key").addEventListener("input", checkReady);
-  document.getElementById("user-id").addEventListener("input", checkReady);
+function clearFile() {
+  parsedIds = [];
+  fileInput.value = "";
+  document.getElementById("id-preview").style.display = "none";
+  checkReady();
+}
 
-  function checkReady() {
-    const hasIds = parsedIds.length > 0;
-    const hasKey = document.getElementById("api-key").value.trim().length > 0;
-    const hasUid = /^\d+$/.test(document.getElementById("user-id").value.trim());
-    document.getElementById("run-btn").disabled = !(hasIds && hasKey && hasUid);
-  }
+document.getElementById("api-key").addEventListener("input", checkReady);
+document.getElementById("user-id").addEventListener("input", checkReady);
 
-  // ── Batch run ──
-  async function runBatch() {
-    const apiKey = document.getElementById("api-key").value.trim();
-    const userId = document.getElementById("user-id").value.trim();
-    const mode   = document.querySelector('input[name="mode"]:checked').value;
+function checkReady() {
+  const ok = parsedIds.length > 0
+    && document.getElementById("api-key").value.trim().length > 0
+    && /^\d+$/.test(document.getElementById("user-id").value.trim());
+  document.getElementById("btn-upload").disabled = !ok || running;
+  document.getElementById("btn-spoof").disabled  = !ok || running;
+}
 
-    document.getElementById("run-btn").disabled = true;
-    document.getElementById("progress-card").style.display = "block";
-    document.getElementById("results-card").style.display = "none";
-    batchResults = [];
+// ── Logging ──
+function log(msg, cls = "log-info") {
+  const box = document.getElementById("log-box");
+  document.getElementById("log-wrap").style.display = "block";
+  const line = document.createElement("div");
+  line.className = cls;
+  line.textContent = `[${new Date().toLocaleTimeString()}] ${msg}`;
+  box.appendChild(line);
+  box.scrollTop = box.scrollHeight;
+}
 
-    const CHUNK = 10; // IDs per request
-    const chunks = [];
-    for (let i = 0; i < parsedIds.length; i += CHUNK) {
-      chunks.push(parsedIds.slice(i, i + CHUNK));
-    }
+// ── Roblox Open Cloud helpers ──
+//
+// Flow per asset (spoof mode):
+//   1. GET  https://assetdelivery.roblox.com/v1/assetId/{id}
+//      → redirect to CDN URL containing the raw binary
+//   2. Download raw binary (ArrayBuffer)
+//   3. POST https://apis.roblox.com/assets/v1/assets
+//      multipart/form-data:
+//        request  = JSON blob (assetType, displayName, creationContext.creator.userId)
+//        fileContent = binary blob
+//   4. Poll  GET https://apis.roblox.com/assets/v1/operations/{operationId}
+//      until done → get assetId
 
-    let done = 0;
+const DELIVERY_BASE  = "https://assetdelivery.roblox.com/v1/assetId";
+const OC_ASSETS_BASE = "https://apis.roblox.com/assets/v1/assets";
+const OC_OPS_BASE    = "https://apis.roblox.com/assets/v1/operations";
 
-    for (const chunk of chunks) {
-      setProgress(done, parsedIds.length, `Memproses chunk ${Math.floor(done/CHUNK)+1}/${chunks.length}`);
+async function downloadAsset(id) {
+  // Step 1: get redirect URL
+  const infoRes = await fetch(`${DELIVERY_BASE}/${id}`, { redirect: "follow" });
+  if (!infoRes.ok) throw new Error(`Delivery API ${infoRes.status}`);
+  const info = await infoRes.json();
+  const cdnUrl = info.location;
+  if (!cdnUrl) throw new Error("No CDN location returned");
 
-      try {
-        const res = await fetch("/api/batch", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "x-roblox-api-key": apiKey,
-            "x-roblox-user-id": userId,
-          },
-          body: JSON.stringify({
-            ids: chunk,
-            apiKey,   // also in body for serverless env fallback
-            userId,
-            mode,     // "spoof" | "plain"
-          }),
-        });
+  // Step 2: download binary
+  const fileRes = await fetch(cdnUrl);
+  if (!fileRes.ok) throw new Error(`CDN download ${fileRes.status}`);
+  return await fileRes.arrayBuffer();
+}
 
-        const data = await res.json();
-        if (data.results) {
-          batchResults.push(...data.results);
-        } else {
-          chunk.forEach(id => batchResults.push({ originalId: id, status: "error", error: data.error || "Unknown" }));
-        }
-      } catch (err) {
-        chunk.forEach(id => batchResults.push({ originalId: id, status: "error", error: err.message }));
+async function uploadAsset(apiKey, userId, assetType, displayName, fileBuffer, spoof) {
+  const requestJson = {
+    assetType,
+    displayName: spoof ? displayName : displayName,
+    description: "",
+    creationContext: {
+      creator: {
+        userId: parseInt(userId, 10)
       }
-
-      done += chunk.length;
-      setProgress(done, parsedIds.length, `Selesai ${done} dari ${parsedIds.length}`);
     }
+  };
 
-    setProgress(parsedIds.length, parsedIds.length, "Selesai");
-    renderResults();
-    document.getElementById("run-btn").disabled = false;
-    toast("Batch selesai.");
+  const formData = new FormData();
+  formData.append("request", new Blob([JSON.stringify(requestJson)], { type: "application/json" }));
+  formData.append("fileContent", new Blob([fileBuffer], { type: "application/octet-stream" }), "asset.bin");
+
+  const res = await fetch(OC_ASSETS_BASE, {
+    method: "POST",
+    headers: {
+      "x-api-key": apiKey,
+    },
+    body: formData
+  });
+
+  if (!res.ok) {
+    const errText = await res.text();
+    throw new Error(`Upload failed ${res.status}: ${errText.slice(0, 120)}`);
   }
 
-  function setProgress(done, total, label) {
-    const pct = total > 0 ? Math.round((done / total) * 100) : 0;
-    document.getElementById("progress-fill").style.width = pct + "%";
-    document.getElementById("progress-text").textContent = label;
-    document.getElementById("progress-detail").textContent = `${done} / ${total}`;
-  }
+  const data = await res.json();
+  // Returns an Operation object: { operationId, done, response? }
+  return data;
+}
 
-  // ── Render results ──
-  function renderResults() {
-    const tbody = document.getElementById("results-tbody");
-    tbody.innerHTML = "";
-
-    batchResults.forEach((r, i) => {
-      const tr = document.createElement("tr");
-
-      const statusClass = r.status === "done" ? "s-done"
-        : r.status === "error" ? "s-error" : "s-pending";
-      const statusLabel = r.status === "done" ? "done"
-        : r.status === "error" ? "error"
-        : r.status === "uploaded_pending" ? "pending" : r.status;
-
-      tr.innerHTML = `
-        <td>${r.originalId}</td>
-        <td><span class="status-badge ${statusClass}">${statusLabel}</span></td>
-        <td>
-          ${r.newId
-            ? `<button class="copy-btn" data-id="${r.newId}" onclick="copyId(this, '${r.newId}')">${r.newId}</button>`
-            : `<span style="color:var(--muted)">—</span>`}
-        </td>
-        <td>
-          ${r.robloxLink
-            ? `<a href="${r.robloxLink}" target="_blank" style="color:var(--accent2);font-size:12px;">Buka ↗</a>`
-            : "—"}
-        </td>
-        <td>
-          ${r.error ? `<span class="error-msg" title="${r.error}">${r.error}</span>` : "—"}
-        </td>
-      `;
-      tbody.appendChild(tr);
+async function pollOperation(apiKey, operationId, maxAttempts = 20) {
+  for (let i = 0; i < maxAttempts; i++) {
+    await sleep(2000);
+    const res = await fetch(`${OC_OPS_BASE}/${operationId}`, {
+      headers: { "x-api-key": apiKey }
     });
+    if (!res.ok) continue;
+    const data = await res.json();
+    if (data.done) {
+      if (data.error) throw new Error(data.error.message || "Operation failed");
+      return data.response?.assetId || data.response?.Id || null;
+    }
+  }
+  throw new Error("Timeout polling operation");
+}
 
-    document.getElementById("results-card").style.display = "block";
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+// ── Single ID processor ──
+async function processId(id, apiKey, userId, assetType, mode) {
+  log(`→ Processing ${id} [${mode}]`, "log-info");
+  try {
+    const buffer = await downloadAsset(id);
+    log(`  ✓ Downloaded ${id} (${(buffer.byteLength/1024).toFixed(1)} KB)`, "log-ok");
+
+    const displayName = `asset_${id}`;
+    const op = await uploadAsset(apiKey, userId, assetType, displayName, buffer, mode === "spoof");
+    log(`  ↑ Upload queued — operationId: ${op.operationId || op.path || "?"}`, "log-info");
+
+    const opId = op.operationId || (op.path && op.path.split("/").pop()) || null;
+    if (!opId) throw new Error("No operationId returned");
+
+    const newId = await pollOperation(apiKey, opId);
+    if (!newId) throw new Error("Operation done but no assetId returned");
+
+    log(`  ✓ Done — new ID: ${newId}`, "log-ok");
+    return { originalId: id, status: "done", newId: String(newId), robloxLink: `https://www.roblox.com/catalog/${newId}` };
+  } catch (err) {
+    log(`  ✗ ${id}: ${err.message}`, "log-err");
+    return { originalId: id, status: "error", error: err.message };
+  }
+}
+
+// ── Batch runner with concurrency ──
+async function runBatch(mode) {
+  if (running) return;
+  running = true;
+  checkReady();
+
+  const apiKey     = document.getElementById("api-key").value.trim();
+  const userId     = document.getElementById("user-id").value.trim();
+  const assetType  = document.getElementById("asset-type").value;
+  const concurrency = Math.max(1, Math.min(10, parseInt(document.getElementById("concurrency").value, 10) || 3));
+
+  document.getElementById("progress-card").style.display = "block";
+  document.getElementById("results-card").style.display = "none";
+  document.getElementById("log-box").innerHTML = "";
+  document.getElementById("log-wrap").style.display = "none";
+  batchResults = [];
+
+  log(`Starting batch — ${parsedIds.length} IDs, mode: ${mode}, concurrency: ${concurrency}`, "log-warn");
+
+  let done = 0;
+  const total = parsedIds.length;
+  const queue = [...parsedIds];
+  const results = new Array(total);
+
+  // Map id → index for ordering
+  const idIndexMap = {};
+  parsedIds.forEach((id, i) => { idIndexMap[id] = i; });
+
+  // Worker pool
+  async function worker() {
+    while (queue.length > 0) {
+      const id = queue.shift();
+      const idx = idIndexMap[id];
+      const result = await processId(id, apiKey, userId, assetType, mode);
+      results[idx] = result;
+      done++;
+      setProgress(done, total, `Processed ${done} / ${total}`);
+    }
   }
 
-  // ── Copy helpers ──
-  function copyId(btn, id) {
-    navigator.clipboard.writeText(id).then(() => {
-      btn.textContent = "Copied";
-      btn.classList.add("copied");
-      setTimeout(() => {
-        btn.textContent = id;
-        btn.classList.remove("copied");
-      }, 1500);
-    });
-  }
+  const workers = [];
+  for (let i = 0; i < concurrency; i++) workers.push(worker());
+  await Promise.all(workers);
 
-  function copyAllIds() {
-    const ids = batchResults.filter(r => r.newId).map(r => r.newId).join("\n");
-    if (!ids) { toast("Belum ada ID baru."); return; }
-    navigator.clipboard.writeText(ids).then(() => toast("Semua ID baru dicopy."));
-  }
+  batchResults = results;
+  setProgress(total, total, "Selesai ✓");
+  renderResults();
+  running = false;
+  checkReady();
+  toast(`Batch selesai — ${batchResults.filter(r => r.status==='done').length} sukses.`);
+}
 
-  function exportTxt() {
-    const lines = batchResults
-      .filter(r => r.newId)
-      .map(r => r.newId)
-      .join("\n");
-    download("new_ids.txt", lines);
-  }
+function setProgress(done, total, label) {
+  const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+  document.getElementById("progress-fill").style.width = pct + "%";
+  document.getElementById("progress-text").textContent = label;
+  document.getElementById("progress-detail").textContent = `${done} / ${total}`;
+}
 
-  function exportCsv() {
-    const header = "original_id,new_id,status,error\n";
-    const rows = batchResults.map(r =>
-      `${r.originalId},${r.newId || ""},${r.status},"${(r.error || "").replace(/"/g, "'")}"`
-    ).join("\n");
-    download("results.csv", header + rows);
-  }
+// ── Render results ──
+function renderResults() {
+  const tbody = document.getElementById("results-tbody");
+  tbody.innerHTML = "";
+  batchResults.forEach(r => {
+    const sc = r.status === "done" ? "s-done" : r.status === "error" ? "s-error" : "s-pending";
+    const sl = r.status === "done" ? "done" : r.status === "error" ? "error" : "pending";
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${r.originalId}</td>
+      <td><span class="status-badge ${sc}">${sl}</span></td>
+      <td>${r.newId
+        ? `<button class="copy-btn" onclick="copyId(this,'${r.newId}')">${r.newId}</button>`
+        : `<span style="color:var(--muted)">—</span>`}</td>
+      <td>${r.robloxLink
+        ? `<a href="${r.robloxLink}" target="_blank" style="color:var(--accent2);font-size:12px;">Buka ↗</a>`
+        : "—"}</td>
+      <td>${r.error ? `<span class="error-msg" title="${r.error}">${r.error}</span>` : "—"}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+  document.getElementById("results-card").style.display = "block";
+}
 
-  function download(name, content) {
-    const a = document.createElement("a");
-    a.href = "data:text/plain;charset=utf-8," + encodeURIComponent(content);
-    a.download = name;
-    a.click();
-  }
+// ── Copy / export ──
+function copyId(btn, id) {
+  navigator.clipboard.writeText(id).then(() => {
+    btn.textContent = "Copied"; btn.classList.add("copied");
+    setTimeout(() => { btn.textContent = id; btn.classList.remove("copied"); }, 1500);
+  });
+}
+function copyAllIds() {
+  const ids = batchResults.filter(r => r.newId).map(r => r.newId).join("\n");
+  if (!ids) { toast("Belum ada ID baru."); return; }
+  navigator.clipboard.writeText(ids).then(() => toast("Semua ID baru dicopy."));
+}
+function exportTxt() {
+  download("new_ids.txt", batchResults.filter(r => r.newId).map(r => r.newId).join("\n"));
+}
+function exportCsv() {
+  const hdr = "original_id,new_id,status,error\n";
+  const rows = batchResults.map(r =>
+    `${r.originalId},${r.newId||""},${r.status},"${(r.error||"").replace(/"/g,"'")}"`
+  ).join("\n");
+  download("results.csv", hdr + rows);
+}
+function exportLua() {
+  const lines = ["-- ID mapping: original -> reuploaded"];
+  lines.push("local IdMap = {");
+  batchResults.filter(r => r.newId).forEach(r => {
+    lines.push(`  ["${r.originalId}"] = "${r.newId}",`);
+  });
+  lines.push("}");
+  lines.push("return IdMap");
+  download("id_map.lua", lines.join("\n"));
+}
+function download(name, content) {
+  const a = document.createElement("a");
+  a.href = "data:text/plain;charset=utf-8," + encodeURIComponent(content);
+  a.download = name; a.click();
+}
 
-  // ── Toast ──
-  function toast(msg) {
-    const el = document.getElementById("toast");
-    el.textContent = msg;
-    el.classList.add("show");
-    setTimeout(() => el.classList.remove("show"), 2800);
-  }
+// ── Toast ──
+function toast(msg) {
+  const el = document.getElementById("toast");
+  el.textContent = msg; el.classList.add("show");
+  setTimeout(() => el.classList.remove("show"), 2800);
+}
 </script>
 </body>
 </html>

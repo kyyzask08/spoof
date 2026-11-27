@@ -155,6 +155,37 @@ function patchBinaryRbxm(buffer, userId) {
 
 // ── Step 3: Upload ke Open Cloud ──────────────────────────────────────────────
 
+function buildMultipart(metadataStr, fileBuffer) {
+  const boundary = `----FormBoundary${Date.now().toString(16)}`;
+  const CRLF     = "\r\n";
+
+  const metaPart = Buffer.concat([
+    Buffer.from(
+      `--${boundary}${CRLF}` +
+      `Content-Disposition: form-data; name="request"${CRLF}` +
+      `Content-Type: application/json${CRLF}${CRLF}` +
+      metadataStr + CRLF,
+      "utf8"
+    ),
+  ]);
+
+  const filePart = Buffer.concat([
+    Buffer.from(
+      `--${boundary}${CRLF}` +
+      `Content-Disposition: form-data; name="fileContent"; filename="asset.bin"${CRLF}` +
+      `Content-Type: application/octet-stream${CRLF}${CRLF}`,
+      "utf8"
+    ),
+    fileBuffer,
+    Buffer.from(CRLF, "utf8"),
+  ]);
+
+  const closing = Buffer.from(`--${boundary}--${CRLF}`, "utf8");
+  const body    = Buffer.concat([metaPart, filePart, closing]);
+
+  return { body, contentType: `multipart/form-data; boundary=${boundary}` };
+}
+
 async function uploadAsset(buffer, apiKey, userId, assetType) {
   const metadata = JSON.stringify({
     assetType,
@@ -165,20 +196,16 @@ async function uploadAsset(buffer, apiKey, userId, assetType) {
     },
   });
 
-  // Native FormData — no import needed, built-in Node 18+
-  const form = new FormData();
-  form.append("request", new Blob([metadata], { type: "application/json" }));
-  form.append(
-    "fileContent",
-    new Blob([buffer], { type: "application/octet-stream" }),
-    "asset.bin"
-  );
+  const { body, contentType } = buildMultipart(metadata, buffer);
 
   const res = await fetchWithRetry(OPEN_CLOUD_BASE, {
     method:  "POST",
-    headers: { "x-api-key": apiKey },
-    // jangan set Content-Type manual — biar fetch isi boundary sendiri
-    body: form,
+    headers: {
+      "x-api-key":     apiKey,
+      "Content-Type":  contentType,
+      "Content-Length": String(body.byteLength),
+    },
+    body,
   });
 
   if (!res.ok) {

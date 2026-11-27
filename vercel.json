@@ -2,11 +2,12 @@
   "version": 2,
   "functions": {
     "api/batch.js": {
-      "maxDuration": 300
+      "maxDuration": 300,
+      "runtime": "nodejs20.x"
     }
   },
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/api/$1" },
-    { "source": "/(.*)", "destination": "/index.html" }
+    { "source": "/(.*)",     "destination": "/index.html" }
   ]
 }

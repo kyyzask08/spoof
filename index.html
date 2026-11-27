@@ -30,19 +30,45 @@
     align-items: center;
     padding: 40px 16px 80px;
   }
+
+  /* ── Header ── */
   header { width: 100%; max-width: 760px; margin-bottom: 40px; }
   .logo { font-size: 11px; letter-spacing: .18em; color: var(--accent); text-transform: uppercase; font-weight: 600; margin-bottom: 8px; }
   h1 { font-size: clamp(1.6rem,4vw,2.4rem); font-weight: 700; line-height: 1.1; color: #fff; }
   h1 span { color: var(--accent2); }
   .subtitle { margin-top: 8px; color: var(--muted); font-size: 14px; max-width: 500px; line-height: 1.6; }
+
+  /* ── Proxy status pill ── */
+  .proxy-status {
+    display: inline-flex; align-items: center; gap: 7px;
+    margin-top: 14px; padding: 5px 12px;
+    border-radius: 999px; border: 1px solid var(--border);
+    font-size: 12px; font-weight: 600; color: var(--muted);
+    cursor: pointer; transition: border-color .2s;
+    user-select: none;
+  }
+  .proxy-status:hover { border-color: var(--accent); }
+  .proxy-dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--muted); flex-shrink: 0;
+    transition: background .3s;
+  }
+  .proxy-dot.ok   { background: var(--ok);  box-shadow: 0 0 6px var(--ok); }
+  .proxy-dot.fail { background: var(--err); }
+
+  /* ── Card ── */
   .card { width: 100%; max-width: 760px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 28px; margin-bottom: 20px; }
   .card-title { font-size: 12px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: 16px; }
+
+  /* ── Dropzone ── */
   .dropzone { border: 2px dashed var(--border); border-radius: 8px; padding: 40px 20px; text-align: center; cursor: pointer; transition: border-color .2s, background .2s; position: relative; }
   .dropzone.drag { border-color: var(--accent); background: rgba(124,106,255,.06); }
   .dropzone input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
   .dropzone-icon { font-size: 32px; margin-bottom: 10px; }
   .dropzone-label { color: var(--text); font-size: 15px; font-weight: 500; }
   .dropzone-sub { color: var(--muted); font-size: 13px; margin-top: 4px; }
+
+  /* ── ID preview ── */
   #id-preview { margin-top: 16px; display: none; }
   .id-preview-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
   .id-count { font-size: 13px; color: var(--muted); }
@@ -50,6 +76,8 @@
   .id-scroll { background: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: 12px; max-height: 140px; overflow-y: auto; font-family: var(--mono); font-size: 12px; color: var(--muted); line-height: 1.8; word-break: break-all; }
   .id-scroll::-webkit-scrollbar { width: 4px; }
   .id-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+  /* ── Config fields ── */
   .config-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px; }
   @media (max-width: 520px) { .config-row { grid-template-columns: 1fr; } }
   .field label { display: block; font-size: 11px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
@@ -61,22 +89,13 @@
   .field input::placeholder { color: var(--muted); }
   .field select option { background: var(--surface); }
 
-  /* ── Two main action buttons ── */
+  /* ── Buttons ── */
   .action-buttons { display: flex; gap: 10px; margin-top: 20px; }
   .btn-action {
-    flex: 1;
-    padding: 14px;
-    font-weight: 700;
-    font-size: 14px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: opacity .2s, transform .1s;
-    letter-spacing: .02em;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
+    flex: 1; padding: 14px; font-weight: 700; font-size: 14px;
+    border: none; border-radius: 8px; cursor: pointer;
+    transition: opacity .2s, transform .1s; letter-spacing: .02em;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
   }
   .btn-action:hover:not(:disabled) { opacity: .88; }
   .btn-action:active:not(:disabled) { transform: scale(.99); }
@@ -93,7 +112,7 @@
 
   /* ── Log ── */
   #log-wrap { margin-top: 14px; display: none; }
-  .log-box { background: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: 10px 12px; max-height: 160px; overflow-y: auto; font-family: var(--mono); font-size: 11px; line-height: 1.8; }
+  .log-box { background: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: 10px 12px; max-height: 180px; overflow-y: auto; font-family: var(--mono); font-size: 11px; line-height: 1.8; }
   .log-box::-webkit-scrollbar { width: 4px; }
   .log-box::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
   .log-ok   { color: var(--ok); }
@@ -113,7 +132,7 @@
   tbody tr:last-child { border-bottom: none; }
   tbody td { padding: 10px 10px; font-family: var(--mono); vertical-align: middle; }
   .status-badge { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 700; letter-spacing: .06em; }
-  .s-done    { background: rgba(52,211,153,.12); color: var(--ok); }
+  .s-done    { background: rgba(52,211,153,.12);  color: var(--ok); }
   .s-error   { background: rgba(248,113,113,.12); color: var(--err); }
   .s-pending { background: rgba(251,191,36,.12);  color: var(--warn); }
   .copy-btn { padding: 3px 8px; background: var(--border); border: none; border-radius: 4px; color: var(--text); font-family: var(--mono); font-size: 11px; cursor: pointer; transition: background .15s; }
@@ -124,7 +143,9 @@
   /* ── Info box ── */
   .info-box { background: rgba(124,106,255,.07); border: 1px solid rgba(124,106,255,.22); border-radius: 8px; padding: 14px 16px; font-size: 12px; color: var(--muted); line-height: 1.7; margin-top: 14px; }
   .info-box strong { color: var(--accent2); }
+  .info-box code { background: rgba(255,255,255,.05); padding: 1px 5px; border-radius: 3px; font-family: var(--mono); font-size: 11px; }
 
+  /* ── Toast ── */
   #toast { position: fixed; bottom: 28px; right: 28px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 12px 18px; font-size: 13px; color: var(--text); opacity: 0; transform: translateY(10px); transition: opacity .25s, transform .25s; pointer-events: none; z-index: 999; }
   #toast.show { opacity: 1; transform: translateY(0); }
 </style>
@@ -134,10 +155,19 @@
 <header>
   <div class="logo">AnimReup</div>
   <h1>Roblox Asset<br><span>Reuploader</span></h1>
-  <p class="subtitle">Upload .txt berisi list ID — parsing otomatis semua format, strip metadata creator, re-upload ke akun kamu via Open Cloud API.</p>
+  <p class="subtitle">
+    Upload .txt berisi list ID — parsing otomatis semua format, strip metadata creator,
+    re-upload ke akun kamu via Open Cloud API.
+  </p>
+
+  <!-- Proxy health indicator -->
+  <div class="proxy-status" id="proxy-status" onclick="checkProxy()" title="Klik untuk re-check proxy">
+    <div class="proxy-dot" id="proxy-dot"></div>
+    <span id="proxy-label">Proxy: checking…</span>
+  </div>
 </header>
 
-<!-- Upload card -->
+<!-- ── Input card ── -->
 <div class="card">
   <div class="card-title">Input</div>
 
@@ -184,9 +214,12 @@
   </div>
 
   <div class="info-box">
-    <strong>Cara kerja Spoof Upload:</strong> Setiap asset diunduh dari Roblox CDN → metadata creator di-strip / diganti userId kamu → di-upload ulang lewat
-    <code>POST /v1/assets</code> (Open Cloud). ID baru yang muncul di tabel adalah assetId milik akun kamu sendiri.
-    Pastikan API Key punya permission <strong>asset:write</strong> dan <strong>asset:read</strong>.
+    <strong>Cara kerja Spoof Upload:</strong><br>
+    1. Asset diunduh dari Roblox CDN lewat <code>proxy :3131/delivery/:id</code><br>
+    2. Dikirim ke proxy <code>/upload</code> → proxy build multipart → forward ke Open Cloud <code>POST /v1/assets</code><br>
+    3. Proxy poll <code>/v1/operations/:id</code> dan return <code>assetId</code> baru.<br><br>
+    API Key butuh permission <strong>asset:write</strong> + <strong>asset:read</strong>.
+    Jalankan dulu: <code>node proxy.js</code>
   </div>
 
   <div class="action-buttons">
@@ -199,14 +232,14 @@
   </div>
 </div>
 
-<!-- Progress card -->
+<!-- ── Progress card ── -->
 <div class="card" id="progress-card">
   <div class="card-title">Progress</div>
   <div class="progress-bar-wrap">
     <div class="progress-bar-fill" id="progress-fill"></div>
   </div>
   <div class="progress-label">
-    <span id="progress-text">Memproses...</span> —
+    <span id="progress-text">Memproses…</span> —
     <span id="progress-detail">0 / 0</span>
   </div>
   <div id="log-wrap">
@@ -214,7 +247,7 @@
   </div>
 </div>
 
-<!-- Results card -->
+<!-- ── Results card ── -->
 <div class="card" id="results-card">
   <div class="card-title">Hasil</div>
   <div class="result-actions">
@@ -242,16 +275,39 @@
 <div id="toast"></div>
 
 <script>
+// ── Config ──
+const PROXY = "http://localhost:3131";
+
 // ── State ──
 let parsedIds    = [];
 let batchResults = [];
 let running      = false;
 
+// ── Proxy health check ──
+async function checkProxy() {
+  const dot   = document.getElementById("proxy-dot");
+  const label = document.getElementById("proxy-label");
+  dot.className = "proxy-dot";
+  label.textContent = "Proxy: checking…";
+  try {
+    const res = await fetch(`${PROXY}/health`, { signal: AbortSignal.timeout(3000) });
+    const data = await res.json();
+    dot.className = "proxy-dot ok";
+    label.textContent = `Proxy: online (Node ${data.node})`;
+  } catch {
+    dot.className = "proxy-dot fail";
+    label.textContent = "Proxy: offline — jalankan node proxy.js";
+  }
+}
+// Auto-check on load + every 30s
+checkProxy();
+setInterval(checkProxy, 30000);
+
 // ── File input ──
 const dropzone = document.getElementById("dropzone");
 const fileInput = document.getElementById("file-input");
 
-dropzone.addEventListener("dragover", e => { e.preventDefault(); dropzone.classList.add("drag"); });
+dropzone.addEventListener("dragover",  e => { e.preventDefault(); dropzone.classList.add("drag"); });
 dropzone.addEventListener("dragleave", () => dropzone.classList.remove("drag"));
 dropzone.addEventListener("drop", e => {
   e.preventDefault();
@@ -266,41 +322,35 @@ function handleFile(file) {
   const reader = new FileReader();
   reader.onload = e => {
     const text = e.target.result;
-
-    // ── Universal ID extraction ──
-    // Matches: rbxassetid://DIGITS, SoundId="...DIGITS", plain DIGITS (≥6 chars)
-    // Priority parse: grab all numeric sequences that are ≥6 digits
     const idSet = new Set();
 
     // Pattern 1: rbxassetid://NUMBER
-    const p1 = text.matchAll(/rbxassetid:\/\/(\d{6,})/gi);
-    for (const m of p1) idSet.add(m[1]);
+    for (const m of text.matchAll(/rbxassetid:\/\/(\d{6,})/gi))
+      idSet.add(m[1]);
 
-    // Pattern 2: SoundId="rbxassetid://NUMBER" or ImageId / AnimationId
-    const p2 = text.matchAll(/(?:Sound|Image|Animation|Asset)Id\s*=\s*["']?rbxassetid:\/\/(\d{6,})["']?/gi);
-    for (const m of p2) idSet.add(m[1]);
+    // Pattern 2: SoundId / ImageId / AnimationId = "rbxassetid://NUMBER"
+    for (const m of text.matchAll(/(?:Sound|Image|Animation|Asset)Id\s*=\s*["']?rbxassetid:\/\/(\d{6,})["']?/gi))
+      idSet.add(m[1]);
 
-    // Pattern 3: pipe-separated  ID|Name  (output from music_list.txt style)
-    const p3 = text.matchAll(/^(\d{6,})\|/gm);
-    for (const m of p3) idSet.add(m[1]);
+    // Pattern 3: pipe-separated  NUMBER|Name
+    for (const m of text.matchAll(/^(\d{6,})\|/gm))
+      idSet.add(m[1]);
 
-    // Pattern 4: plain numeric IDs on their own (newline / comma / space / semicolon separated)
-    // Only if not already found via above patterns — catch-all
-    const p4 = text.matchAll(/(?<![\/\d])(\d{10,})(?!\d)/g);
-    for (const m of p4) idSet.add(m[1]);
+    // Pattern 4: standalone ≥10 digit numbers
+    for (const m of text.matchAll(/(?<![\/\d])(\d{10,})(?!\d)/g))
+      idSet.add(m[1]);
 
-    // Fallback: any ≥6-digit standalone token
-    const p5 = text.split(/[\r\n,;\s|]+/);
-    for (const tok of p5) {
+    // Fallback: any ≥6-digit token separated by whitespace/comma/semicolon
+    for (const tok of text.split(/[\r\n,;\s|]+/)) {
       const t = tok.trim();
       if (/^\d{6,}$/.test(t)) idSet.add(t);
     }
 
     parsedIds = [...idSet];
 
-    document.getElementById("id-count-num").textContent = parsedIds.length;
+    document.getElementById("id-count-num").textContent    = parsedIds.length;
     document.getElementById("id-scroll-content").textContent = parsedIds.join("  |  ");
-    document.getElementById("id-preview").style.display = "block";
+    document.getElementById("id-preview").style.display    = "block";
     checkReady();
   };
   reader.readAsText(file);
@@ -335,198 +385,185 @@ function log(msg, cls = "log-info") {
   box.scrollTop = box.scrollHeight;
 }
 
-// ── Roblox Open Cloud helpers ──
-//
-// Flow per asset (spoof mode):
-//   1. GET  https://assetdelivery.roblox.com/v1/assetId/{id}
-//      → redirect to CDN URL containing the raw binary
-//   2. Download raw binary (ArrayBuffer)
-//   3. POST https://apis.roblox.com/assets/v1/assets
-//      multipart/form-data:
-//        request  = JSON blob (assetType, displayName, creationContext.creator.userId)
-//        fileContent = binary blob
-//   4. Poll  GET https://apis.roblox.com/assets/v1/operations/{operationId}
-//      until done → get assetId
+// ── Helpers ──
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
-const DELIVERY_BASE  = "https://assetdelivery.roblox.com/v1/assetId";
-const OC_ASSETS_BASE = "https://apis.roblox.com/assets/v1/assets";
-const OC_OPS_BASE    = "https://apis.roblox.com/assets/v1/operations";
-
-async function downloadAsset(id) {
-  // Step 1: get redirect URL
-  const infoRes = await fetch(`${DELIVERY_BASE}/${id}`, { redirect: "follow" });
-  if (!infoRes.ok) throw new Error(`Delivery API ${infoRes.status}`);
-  const info = await infoRes.json();
-  const cdnUrl = info.location;
-  if (!cdnUrl) throw new Error("No CDN location returned");
-
-  // Step 2: download binary
-  const fileRes = await fetch(cdnUrl);
-  if (!fileRes.ok) throw new Error(`CDN download ${fileRes.status}`);
-  return await fileRes.arrayBuffer();
+function bufToBase64(buffer) {
+  // Uint8Array → base64 string
+  const bytes = new Uint8Array(buffer);
+  let bin = "";
+  for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+  return btoa(bin);
 }
 
-async function uploadAsset(apiKey, userId, assetType, displayName, fileBuffer, spoof) {
-  const requestJson = {
+// ── Core: download asset binary via proxy ──
+async function downloadAsset(id) {
+  const res = await fetch(`${PROXY}/delivery/${id}`);
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: res.statusText }));
+    throw new Error(err.error || `Delivery ${res.status}`);
+  }
+  return await res.arrayBuffer();
+}
+
+// ── Core: upload via proxy ──
+async function uploadAsset(apiKey, userId, assetType, displayName, fileBuffer) {
+  const body = {
+    apiKey,
+    userId,
     assetType,
-    displayName: spoof ? displayName : displayName,
-    description: "",
-    creationContext: {
-      creator: {
-        userId: parseInt(userId, 10)
-      }
-    }
+    displayName,
+    fileBase64: bufToBase64(fileBuffer),
   };
 
-  const formData = new FormData();
-  formData.append("request", new Blob([JSON.stringify(requestJson)], { type: "application/json" }));
-  formData.append("fileContent", new Blob([fileBuffer], { type: "application/octet-stream" }), "asset.bin");
-
-  const res = await fetch(OC_ASSETS_BASE, {
-    method: "POST",
-    headers: {
-      "x-api-key": apiKey,
-    },
-    body: formData
+  const res = await fetch(`${PROXY}/upload`, {
+    method:  "POST",
+    headers: { "Content-Type": "application/json" },
+    body:    JSON.stringify(body),
   });
 
-  if (!res.ok) {
-    const errText = await res.text();
-    throw new Error(`Upload failed ${res.status}: ${errText.slice(0, 120)}`);
-  }
-
-  const data = await res.json();
-  // Returns an Operation object: { operationId, done, response? }
-  return data;
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error || `Upload ${res.status}`);
+  return data; // { operationId, path, done, ... }
 }
 
-async function pollOperation(apiKey, operationId, maxAttempts = 20) {
+// ── Core: poll operation via proxy ──
+async function pollOperation(apiKey, operationId, maxAttempts = 25) {
   for (let i = 0; i < maxAttempts; i++) {
-    await sleep(2000);
-    const res = await fetch(`${OC_OPS_BASE}/${operationId}`, {
-      headers: { "x-api-key": apiKey }
+    await sleep(2500);
+    const res = await fetch(`${PROXY}/poll/${encodeURIComponent(operationId)}`, {
+      headers: { "x-api-key": apiKey },
     });
     if (!res.ok) continue;
     const data = await res.json();
     if (data.done) {
       if (data.error) throw new Error(data.error.message || "Operation failed");
-      return data.response?.assetId || data.response?.Id || null;
+      return String(data.response?.assetId || data.response?.Id || "");
     }
   }
-  throw new Error("Timeout polling operation");
+  throw new Error("Timeout: operation did not complete in time");
 }
 
-function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
-
-// ── Single ID processor ──
+// ── Single asset processor ──
 async function processId(id, apiKey, userId, assetType, mode) {
-  log(`→ Processing ${id} [${mode}]`, "log-info");
+  log(`→ ${id}  [${mode}]`);
   try {
     const buffer = await downloadAsset(id);
-    log(`  ✓ Downloaded ${id} (${(buffer.byteLength/1024).toFixed(1)} KB)`, "log-ok");
+    log(`  ✓ Downloaded ${id}  (${(buffer.byteLength / 1024).toFixed(1)} KB)`, "log-ok");
 
-    const displayName = `asset_${id}`;
-    const op = await uploadAsset(apiKey, userId, assetType, displayName, buffer, mode === "spoof");
-    log(`  ↑ Upload queued — operationId: ${op.operationId || op.path || "?"}`, "log-info");
+    const displayName = `${mode === "spoof" ? "spoof" : "reup"}_${id}`;
+    const op = await uploadAsset(apiKey, userId, assetType, displayName, buffer);
 
-    const opId = op.operationId || (op.path && op.path.split("/").pop()) || null;
-    if (!opId) throw new Error("No operationId returned");
+    // Extract operationId — OC can return { path: "operations/XXXX" } or { operationId: "XXXX" }
+    const opId = op.operationId
+      || (op.path && op.path.split("/").pop())
+      || null;
+
+    if (!opId) throw new Error("No operationId in upload response: " + JSON.stringify(op));
+
+    log(`  ↑ Queued  operationId=${opId}`, "log-info");
 
     const newId = await pollOperation(apiKey, opId);
     if (!newId) throw new Error("Operation done but no assetId returned");
 
-    log(`  ✓ Done — new ID: ${newId}`, "log-ok");
-    return { originalId: id, status: "done", newId: String(newId), robloxLink: `https://www.roblox.com/catalog/${newId}` };
+    log(`  ✓ Done → ${newId}`, "log-ok");
+    return {
+      originalId: id,
+      status:     "done",
+      newId,
+      robloxLink: `https://www.roblox.com/catalog/${newId}`,
+    };
   } catch (err) {
     log(`  ✗ ${id}: ${err.message}`, "log-err");
     return { originalId: id, status: "error", error: err.message };
   }
 }
 
-// ── Batch runner with concurrency ──
+// ── Batch runner ──
 async function runBatch(mode) {
   if (running) return;
   running = true;
   checkReady();
 
-  const apiKey     = document.getElementById("api-key").value.trim();
-  const userId     = document.getElementById("user-id").value.trim();
-  const assetType  = document.getElementById("asset-type").value;
-  const concurrency = Math.max(1, Math.min(10, parseInt(document.getElementById("concurrency").value, 10) || 3));
+  const apiKey      = document.getElementById("api-key").value.trim();
+  const userId      = document.getElementById("user-id").value.trim();
+  const assetType   = document.getElementById("asset-type").value;
+  const concurrency = Math.max(1, Math.min(10,
+    parseInt(document.getElementById("concurrency").value, 10) || 3));
 
   document.getElementById("progress-card").style.display = "block";
-  document.getElementById("results-card").style.display = "none";
-  document.getElementById("log-box").innerHTML = "";
-  document.getElementById("log-wrap").style.display = "none";
+  document.getElementById("results-card").style.display  = "none";
+  document.getElementById("log-box").innerHTML            = "";
+  document.getElementById("log-wrap").style.display      = "none";
   batchResults = [];
 
-  log(`Starting batch — ${parsedIds.length} IDs, mode: ${mode}, concurrency: ${concurrency}`, "log-warn");
+  log(`Batch start — ${parsedIds.length} IDs  mode:${mode}  concurrency:${concurrency}`, "log-warn");
 
-  let done = 0;
-  const total = parsedIds.length;
-  const queue = [...parsedIds];
+  const total   = parsedIds.length;
+  const queue   = [...parsedIds];
   const results = new Array(total);
+  let done      = 0;
 
-  // Map id → index for ordering
-  const idIndexMap = {};
-  parsedIds.forEach((id, i) => { idIndexMap[id] = i; });
+  const idIndex = {};
+  parsedIds.forEach((id, i) => { idIndex[id] = i; });
 
-  // Worker pool
   async function worker() {
     while (queue.length > 0) {
-      const id = queue.shift();
-      const idx = idIndexMap[id];
-      const result = await processId(id, apiKey, userId, assetType, mode);
-      results[idx] = result;
+      const id  = queue.shift();
+      const idx = idIndex[id];
+      results[idx] = await processId(id, apiKey, userId, assetType, mode);
       done++;
       setProgress(done, total, `Processed ${done} / ${total}`);
     }
   }
 
-  const workers = [];
-  for (let i = 0; i < concurrency; i++) workers.push(worker());
-  await Promise.all(workers);
+  await Promise.all(Array.from({ length: concurrency }, worker));
 
   batchResults = results;
   setProgress(total, total, "Selesai ✓");
   renderResults();
   running = false;
   checkReady();
-  toast(`Batch selesai — ${batchResults.filter(r => r.status==='done').length} sukses.`);
+
+  const ok = batchResults.filter(r => r.status === "done").length;
+  toast(`Batch selesai — ${ok} sukses, ${total - ok} gagal.`);
 }
 
 function setProgress(done, total, label) {
   const pct = total > 0 ? Math.round((done / total) * 100) : 0;
-  document.getElementById("progress-fill").style.width = pct + "%";
-  document.getElementById("progress-text").textContent = label;
+  document.getElementById("progress-fill").style.width  = pct + "%";
+  document.getElementById("progress-text").textContent  = label;
   document.getElementById("progress-detail").textContent = `${done} / ${total}`;
 }
 
-// ── Render results ──
+// ── Render results table ──
 function renderResults() {
   const tbody = document.getElementById("results-tbody");
   tbody.innerHTML = "";
   batchResults.forEach(r => {
-    const sc = r.status === "done" ? "s-done" : r.status === "error" ? "s-error" : "s-pending";
-    const sl = r.status === "done" ? "done" : r.status === "error" ? "error" : "pending";
+    const sc = r.status === "done"  ? "s-done"
+             : r.status === "error" ? "s-error"
+             : "s-pending";
     const tr = document.createElement("tr");
     tr.innerHTML = `
       <td>${r.originalId}</td>
-      <td><span class="status-badge ${sc}">${sl}</span></td>
+      <td><span class="status-badge ${sc}">${r.status}</span></td>
       <td>${r.newId
         ? `<button class="copy-btn" onclick="copyId(this,'${r.newId}')">${r.newId}</button>`
         : `<span style="color:var(--muted)">—</span>`}</td>
       <td>${r.robloxLink
         ? `<a href="${r.robloxLink}" target="_blank" style="color:var(--accent2);font-size:12px;">Buka ↗</a>`
         : "—"}</td>
-      <td>${r.error ? `<span class="error-msg" title="${r.error}">${r.error}</span>` : "—"}</td>
+      <td>${r.error
+        ? `<span class="error-msg" title="${r.error}">${r.error}</span>`
+        : "—"}</td>
     `;
     tbody.appendChild(tr);
   });
   document.getElementById("results-card").style.display = "block";
 }
 
-// ── Copy / export ──
+// ── Copy / Export ──
 function copyId(btn, id) {
   navigator.clipboard.writeText(id).then(() => {
     btn.textContent = "Copied"; btn.classList.add("copied");
@@ -539,26 +576,24 @@ function copyAllIds() {
   navigator.clipboard.writeText(ids).then(() => toast("Semua ID baru dicopy."));
 }
 function exportTxt() {
-  download("new_ids.txt", batchResults.filter(r => r.newId).map(r => r.newId).join("\n"));
+  dl("new_ids.txt", batchResults.filter(r => r.newId).map(r => r.newId).join("\n"));
 }
 function exportCsv() {
-  const hdr = "original_id,new_id,status,error\n";
+  const hdr  = "original_id,new_id,status,error\n";
   const rows = batchResults.map(r =>
-    `${r.originalId},${r.newId||""},${r.status},"${(r.error||"").replace(/"/g,"'")}"`
+    `${r.originalId},${r.newId || ""},${r.status},"${(r.error || "").replace(/"/g, "'")}"`
   ).join("\n");
-  download("results.csv", hdr + rows);
+  dl("results.csv", hdr + rows);
 }
 function exportLua() {
-  const lines = ["-- ID mapping: original -> reuploaded"];
-  lines.push("local IdMap = {");
+  const lines = ["-- AnimReup ID mapping: original -> reuploaded", "local IdMap = {"];
   batchResults.filter(r => r.newId).forEach(r => {
-    lines.push(`  ["${r.originalId}"] = "${r.newId}",`);
+    lines.push(`\t["${r.originalId}"] = "${r.newId}",`);
   });
-  lines.push("}");
-  lines.push("return IdMap");
-  download("id_map.lua", lines.join("\n"));
+  lines.push("}", "return IdMap");
+  dl("id_map.lua", lines.join("\n"));
 }
-function download(name, content) {
+function dl(name, content) {
   const a = document.createElement("a");
   a.href = "data:text/plain;charset=utf-8," + encodeURIComponent(content);
   a.download = name; a.click();

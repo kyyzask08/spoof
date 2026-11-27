@@ -1,0 +1,12 @@
+{
+  "name": "animreup",
+  "version": "1.0.0",
+  "type": "module",
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@xmldom/xmldom": "^0.9.5",
+    "form-data": "^4.0.0"
+  }
+}

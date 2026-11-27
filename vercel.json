@@ -1,7 +1,7 @@
 {
   "version": 2,
   "functions": {
-    "batch.js": {
+    "api/batch.js": {
       "maxDuration": 10
     }
   },

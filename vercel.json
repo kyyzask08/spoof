@@ -2,8 +2,7 @@
   "version": 2,
   "functions": {
     "api/batch.js": {
-      "maxDuration": 300,
-      "runtime": "nodejs20.x"
+      "maxDuration": 300
     }
   },
   "rewrites": [
